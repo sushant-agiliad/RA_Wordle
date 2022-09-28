@@ -17,16 +17,20 @@ export class WordComponent implements OnInit {
     return this._wordCreated;
   }
 
+  /** True when word is finalised */
+  public active: boolean;
+
   public letters: Array<Letter>;
   private letterIndex: number;
 
   constructor() {
     this.letters = [];
     this.letterIndex = 0;
+    this.active = false;
+    this.resetWord();
   }
 
   ngOnInit(): void {
-    this.resetWord();
   }
 
   /**
@@ -39,7 +43,8 @@ export class WordComponent implements OnInit {
       this.letters.push({
         character: undefined,
         state: LetterState.White,
-      })
+        index: i,
+      });
     }
   }
 
@@ -48,14 +53,14 @@ export class WordComponent implements OnInit {
    * @param character character to be added
    */
   public addLetter(character: string): void {
-    if (character && character.length > 1 && this.letterIndex < this.letters.length) {
+    if (character && character.length > 0 && this.letterIndex < this.letters.length) {
       this.letters[this.letterIndex].character = character.substring(0, 1);
       this.letterIndex++;
     }
   }
 
   /**
-   * Word is finalised
+   * To be called when the word is finalised
    */
   public wordFinalised(): void {
     var word = '';
@@ -63,13 +68,13 @@ export class WordComponent implements OnInit {
       word = word + this.letters[i].character;
     }
     this._wordCreated = word;
+    this.active = true;
   }
 
   /**
    * Backspace operation
    */
   public deleteLastCharacter(): void {
-    this.letters[this.letterIndex].character = undefined;
-    this.letterIndex--;
+    this.letters[--this.letterIndex].character = undefined;
   }
 }

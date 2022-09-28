@@ -8,4 +8,6 @@ export interface Letter {
     character: string | undefined;
     /** Current state of the letter */
     state: LetterState;
+    /** Index of letter */
+    index: number;
 }
