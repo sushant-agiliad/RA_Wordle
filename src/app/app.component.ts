@@ -18,6 +18,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   public gameWord: string; // Kept for temporary display in UI
   public gameState: GameState;
   public errorMsg: string | undefined;
+  /** Index of words being used currently */
+  private wordIndex = 0;
 
   private getPuzzleWord$: Observable<string>;
 
@@ -46,14 +48,23 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     // Following instructions will be passed by Keyboard component
 
     const testWords = ['Diver', 'China', 'Malai', 'Mario', 'Adale', 'Honda'];
-    this.words.forEach((word, index) => {
-      word.addLetter(testWords[index].substring(0, 1));
-      word.addLetter(testWords[index].substring(1, 2));
-      word.addLetter(testWords[index].substring(2, 3));
-      word.addLetter(testWords[index].substring(3, 4));
-      word.addLetter(testWords[index].substring(4, 5));
-      word.wordFinalised()
-    });
+    this.keyALetter(testWords, 0);
+  }
+
+  private keyALetter(testWords: string[], letterIndex: number) {
+    if (this.gameState == GameState.Playing) {
+      setTimeout(() => {
+        const letter = testWords[this.wordIndex].substring(letterIndex, letterIndex + 1);
+        this.addLetterToWord(letter);
+        if (letterIndex == 4) {
+          this.wordFinalised();
+          this.keyALetter(testWords, 0);
+        } else {
+          this.keyALetter(testWords, ++letterIndex);
+        }
+      }, 100);
+    }
+
   }
 
   ngOnDestroy(): void {
@@ -76,5 +87,29 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   public errorInputWord(error: string) {
     this.errorMsg = error;
+  }
+
+  /** Add letter to the word */
+  public addLetterToWord(character: string): void {
+    if (this.gameState == GameState.Playing) {
+      this.words[this.wordIndex].addLetter(character);
+    }
+  }
+
+  /** Backspace operation */
+  public deleteLastCharacterFromWord(): void {
+    if (this.gameState == GameState.Playing) {
+      this.words[this.wordIndex].deleteLastCharacter();
+    }
+  }
+
+  /** Word is finalised */
+  public wordFinalised(): void {
+    this.words[this.wordIndex].wordFinalised();
+    this.wordIndex++;
+    if (this.wordIndex >= this.words.length) {
+      this.gameState = GameState.Out;
+      this.errorMsg = 'Out of tries, try again';
+    }
   }
 }
