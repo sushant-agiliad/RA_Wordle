@@ -4,8 +4,8 @@
 <div>Game word: {{[[gameWord]]}}</div>
 <div>Game state: {{[[gameState]]}}</div>
 <div>Timestamp: {{dateTime | date:'yyyy-MM-dd HH:mm:ss'}}</div>
-<div data-guess-grid class="grid">
-    <div class="tile" *ngFor="let index of [0,1,2,3,4,5]">
+<div data-guess-grid class="main-container">
+    <div class="words-container" *ngFor="let index of [0,1,2,3,4,5]">
         <app-word #word class="word" (errorInput)="errorInputWord($event)"></app-word>
     </div>
     <div class="error-msg">{{[[errorMsg]]}}</div>
