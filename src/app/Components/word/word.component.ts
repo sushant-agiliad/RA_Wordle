@@ -59,7 +59,7 @@ export class WordComponent implements OnInit {
    */
   public addLetter(character: string): void {
     if (character && character.length > 0 && this.letterIndex < this.letters.length) {
-      this.letters[this.letterIndex].character = character.substring(0, 1);
+      this.letters[this.letterIndex].character = character.toUpperCase().substring(0, 1);
       this.letterIndex++;
     }
   }
