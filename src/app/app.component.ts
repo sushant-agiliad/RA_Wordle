@@ -15,8 +15,9 @@ export class AppComponent implements OnInit, OnDestroy {
   public title = Constants.APP_NAME;
   public dateTime = new Date();
 
-  public gameWord: string;
+  public gameWord: string; // Kept for temporary display in UI
   public gameState: GameState;
+  public errorMsg: string | undefined;
 
   private getPuzzleWord$: Observable<string>;
 
@@ -45,6 +46,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   }
 
+  /**
+   * Create puzzle word
+   */
   private puzzleWordCreate(): void {
     this.getPuzzleWord$ = this.puzzleCreator.fetchPuzzleWord();
     this.getPuzzleWord$.subscribe((response: string) => {
@@ -52,5 +56,11 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
-  
+  /**
+   * Event catcher for WordComponent
+   * @param error 
+   */
+  public errorInputWord(error: string) {
+    this.errorMsg = error;
+  }  
 }

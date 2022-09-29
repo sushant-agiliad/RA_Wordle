@@ -13,6 +13,11 @@ export class LetterStateIdentifierService {
     private puzzleCreatorService: PuzzleCreatorService,
   ) { }
 
+  /**
+   * Get LetterState based on the input letter.character
+   * @param letter input letter
+   * @returns Observable for LetterState
+   */
   public getLetterState(letter: Letter): Observable<LetterState> {
     let response = new Observable<LetterState>((observer) => {
       const puzzleWord = this.puzzleCreatorService.getPuzzleWord();

@@ -3,4 +3,5 @@
 <div>Game word: {{[[gameWord]]}}</div>
 <div>Game state: {{[[gameState]]}}</div>
 <div>Timestamp: {{dateTime | date:'yyyy-MM-dd HH:mm:ss'}}</div>
-<app-word #word></app-word>
+<app-word #word (errorInput)="errorInputWord($event)"></app-word>
+<div>{{[[errorMsg]]}}</div>

@@ -12,7 +12,7 @@ export class PuzzleCreatorService {
 
   /**
    * Create puzzle word
-   * @returns Puzzle word string
+   * @returns Observable for Puzzle word string
    */
   public fetchPuzzleWord(): Observable<string> {
     let response = new Observable<string>((observer) => {

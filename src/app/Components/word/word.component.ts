@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { WordValidatorService } from '../../../app/Services/word-validator.service';
 import { LetterState } from '../../../app/constants';
 import { Letter } from '../../../app/Model/letter';
 
@@ -23,7 +24,11 @@ export class WordComponent implements OnInit {
   public letters: Array<Letter>;
   private letterIndex: number;
 
-  constructor() {
+  @Output() public errorInput = new EventEmitter<string>();
+
+  constructor(
+    private wordValidatorService: WordValidatorService
+  ) {
     this.letters = [];
     this.letterIndex = 0;
     this.active = false;
@@ -67,8 +72,15 @@ export class WordComponent implements OnInit {
     for (let i = 0; i < this.letters.length; i++) {
       word = word + this.letters[i].character;
     }
-    this._wordCreated = word;
-    this.active = true;
+
+    this.wordValidatorService.validateWord(word).subscribe((response: boolean) => {
+      if (response) {
+        this._wordCreated = word;
+        this.active = true;
+      } else {
+        this.errorInput.emit('Invalid input word, try again');
+      }
+    })
   }
 
   /**
