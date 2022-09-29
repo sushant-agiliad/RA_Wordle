@@ -1,7 +1,12 @@
 <h1>{{title}}</h1>
+<link rel="stylesheet" href="app.component.scss">
 <h2>Master game component. Work in progress</h2>
 <div>Game word: {{[[gameWord]]}}</div>
 <div>Game state: {{[[gameState]]}}</div>
 <div>Timestamp: {{dateTime | date:'yyyy-MM-dd HH:mm:ss'}}</div>
-<app-word #word (errorInput)="errorInputWord($event)"></app-word>
+<div data-guess-grid class="grid">
+    <div class="tile"><app-word #word (errorInput)="errorInputWord($event)"></app-word></div>
+</div>
 <div>{{[[errorMsg]]}}</div>
+<app-keyboard></app-keyboard>
+
