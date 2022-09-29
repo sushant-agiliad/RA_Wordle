@@ -54,8 +54,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       word.addLetter(testWords[index].substring(4, 5));
       word.wordFinalised()
     });
-
-    console.log(">>> AppComponent- elements", this.words);
   }
 
   ngOnDestroy(): void {

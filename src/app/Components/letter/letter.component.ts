@@ -1,4 +1,3 @@
-import { ThisReceiver } from '@angular/compiler';
 import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LetterState } from '../../../app/constants';
@@ -19,6 +18,8 @@ export class LetterComponent implements OnInit, OnDestroy {
     this._active = value;
     if (value) {
       this.getState();
+    } else {
+      this.letter.state = LetterState.White;
     }
   }
 
@@ -29,6 +30,9 @@ export class LetterComponent implements OnInit, OnDestroy {
   /** Main value holder */
   @Input() public letter: Letter;
 
+  /** Default value for Letter.character */
+  @Input() public value: string | undefined;
+
   private letterStateIdentifier$: Observable<LetterState>;
 
   constructor(
@@ -38,12 +42,15 @@ export class LetterComponent implements OnInit, OnDestroy {
     this.letter = {
       character: undefined,
       state: LetterState.White,
-      index: 0,
+      index: -1,
     }
     this.letterStateIdentifier$ = new Observable();
   }
 
   ngOnInit(): void {
+    if (this.value) {
+      this.letter.character = this.value;
+    }
   }
 
   /** Subscribe for state change */
