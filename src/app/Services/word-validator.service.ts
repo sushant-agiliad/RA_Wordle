@@ -19,4 +19,14 @@ export class WordValidatorService {
     });
     return response;
   }
+
+  /**
+   * Check if character is in recommended range
+   * @param character input character
+   * @returns True if valid
+   */
+  validateLetter(character: string): boolean {
+    const validInputs = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+    return validInputs.indexOf(character) > -1;
+  }
 }
