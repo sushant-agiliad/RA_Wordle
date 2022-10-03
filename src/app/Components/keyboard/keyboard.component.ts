@@ -19,7 +19,6 @@ export class KeyboardComponent implements OnInit {
 
   /** On component click event */
   public keyPressed(key: string) {
-    console.log("keyPress", key)
     this.keyPress.emit(key);
   }
 }
