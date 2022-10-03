@@ -10,6 +10,9 @@ export class KeyboardComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    document.addEventListener("keyup", (e) => {
+        alert(e.code);
+    })
   }
 
 }
