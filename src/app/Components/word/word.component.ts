@@ -11,10 +11,10 @@ import { Letter } from '../../../app/Model/letter';
 export class WordComponent implements OnInit {
 
   /** Created word - value holder */
-  private _wordCreated: string | undefined;
+  private _wordCreated: string;
 
-  /** Created word, value available after complete word is created */
-  public get wordCreated(): string | undefined {
+  /** Created word */
+  public get wordCreated(): string {
     return this._wordCreated;
   }
 
@@ -25,6 +25,7 @@ export class WordComponent implements OnInit {
   private letterIndex: number;
 
   @Output() public errorInput = new EventEmitter<string>();
+  @Output() public validInput = new EventEmitter<string>();
 
   constructor(
     private wordValidatorService: WordValidatorService
@@ -32,6 +33,7 @@ export class WordComponent implements OnInit {
     this.letters = [];
     this.letterIndex = 0;
     this.active = false;
+    this._wordCreated = '';
     this.resetWord();
   }
 
@@ -61,6 +63,7 @@ export class WordComponent implements OnInit {
     if (character && character.length > 0 && this.letterIndex < this.letters.length) {
       this.letters[this.letterIndex].character = character.toUpperCase().substring(0, 1);
       this.letterIndex++;
+      this._wordCreated += character;
     }
   }
 
@@ -77,6 +80,7 @@ export class WordComponent implements OnInit {
       if (response) {
         this._wordCreated = word;
         this.active = true;
+        this.validInput.emit(word);
       } else {
         this.errorInput.emit('Invalid input word, try again');
       }

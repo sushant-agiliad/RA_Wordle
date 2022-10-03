@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChildren, QueryList, AfterViewInit, HostListener } from '@angular/core';
 import { Observable } from 'rxjs';
 import { WordComponent } from './Components/word/word.component';
 import { Constants, GameState } from './constants';
@@ -13,6 +13,7 @@ import { PuzzleCreatorService } from './Services/puzzle-creator.service';
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public title = Constants.APP_NAME;
+  public totalWords = Constants.TOTAL_WORDS;
   public dateTime = new Date();
 
   public gameWord: string; // Kept for temporary display in UI
@@ -44,31 +45,23 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.wordElementList.forEach((word: WordComponent, i) => {
       this.words.push(word);
     });
-
-    // Following instructions will be passed by Keyboard component
-
-    const testWords = ['Diver', 'China', 'Malai', 'Mario', 'Adale', 'Honda'];
-    this.keyALetter(testWords, 0);
-  }
-
-  private keyALetter(testWords: string[], letterIndex: number) {
-    if (this.gameState == GameState.Playing) {
-      setTimeout(() => {
-        const letter = testWords[this.wordIndex].substring(letterIndex, letterIndex + 1);
-        this.addLetterToWord(letter);
-        if (letterIndex == 4) {
-          this.wordFinalised();
-          this.keyALetter(testWords, 0);
-        } else {
-          this.keyALetter(testWords, ++letterIndex);
-        }
-      }, 100);
-    }
-
   }
 
   ngOnDestroy(): void {
 
+  }
+
+  @HostListener('document:keypress', ['$event'])
+  private handleKeyboardEvent(event: KeyboardEvent) {
+    if (this.gameState == GameState.Playing) {
+      this.errorMsg = undefined;
+      const key = event.key;
+      if (key == 'Enter') {
+        this.wordFinalised();
+      } else {
+        this.addLetterToWord(key);
+      }
+    }
   }
 
   /**
@@ -82,11 +75,23 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Event catcher for WordComponent
+   * Event catcher from WordComponent on invalid word input
    * @param error 
    */
   public errorInputWord(error: string) {
     this.errorMsg = error;
+  }
+
+  /**
+   * Event catcher from WordComponent on valid input
+   * @param word created word
+   */
+  public validInputWord(word: string) {
+    this.wordIndex++;
+    if (this.wordIndex >= this.words.length) {
+      this.gameState = GameState.Out;
+      this.errorMsg = 'Out of tries, try again';
+    }
   }
 
   /** Add letter to the word */
@@ -105,11 +110,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /** Word is finalised */
   public wordFinalised(): void {
-    this.words[this.wordIndex].wordFinalised();
-    this.wordIndex++;
-    if (this.wordIndex >= this.words.length) {
-      this.gameState = GameState.Out;
-      this.errorMsg = 'Out of tries, try again';
+    if (this.words[this.wordIndex].wordCreated.length < Constants.WORD_SIZE) {
+      this.errorMsg = 'Please enter 5 letter valid word';
+    } else {
+      this.words[this.wordIndex].wordFinalised();
     }
   }
 }
