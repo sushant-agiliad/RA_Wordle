@@ -1,5 +1,5 @@
 export const Constants = {
-    APP_NAME: 'Wordle App',
+    APP_NAME: 'WORDLE',
     WORD_SIZE: 5,
     TOTAL_WORDS: 6,
 };
