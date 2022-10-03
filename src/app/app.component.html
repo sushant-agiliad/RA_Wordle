@@ -12,5 +12,5 @@
         </app-word>
     </div>
     <div class="error-msg">{{[[errorMsg]]}}</div>
-    <app-keyboard></app-keyboard>
+    <app-keyboard (keyPress)="keyPress($event)"></app-keyboard>
 </div>

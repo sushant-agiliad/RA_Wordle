@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChildren, QueryList, AfterViewInit, HostListener } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { WordComponent } from './Components/word/word.component';
 import { Constants, GameState } from './constants';
@@ -51,19 +51,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  @HostListener('document:keypress', ['$event'])
-  private handleKeyboardEvent(event: KeyboardEvent) {
-    if (this.gameState == GameState.Playing) {
-      this.errorMsg = undefined;
-      const key = event.key;
-      if (key == 'Enter') {
-        this.wordFinalised();
-      } else {
-        this.addLetterToWord(key);
-      }
-    }
-  }
-
   /**
    * Create puzzle word
    */
@@ -95,6 +82,21 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       if (this.wordIndex >= this.words.length) {
         this.gameState = GameState.Out;
         this.errorMsg = 'Out of tries, try again';
+      }
+    }
+  }
+
+  /**
+   * Callback for Keyboard component
+   * @param key 
+   */
+  public keyPress(key: string) {
+    if (this.gameState == GameState.Playing) {
+      this.errorMsg = undefined;
+      if (key == 'Enter') {
+        this.wordFinalised();
+      } else {
+        this.addLetterToWord(key);
       }
     }
   }

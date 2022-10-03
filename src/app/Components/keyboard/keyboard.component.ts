@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-keyboard',
@@ -7,12 +7,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class KeyboardComponent implements OnInit {
 
+  @Output() public keyPress = new EventEmitter<string>();
+
   constructor() { }
 
   ngOnInit(): void {
-    document.addEventListener("keyup", (e) => {
-        alert(e.code);
+    document.addEventListener("keyup", (key) => {
+      this.keyPress.emit(key.key);
     })
   }
 
+  /** On component click event */
+  public keyPressed(key: string) {
+    console.log("keyPress", key)
+    this.keyPress.emit(key);
+  }
 }

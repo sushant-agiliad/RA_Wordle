@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Input } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LetterState } from '../../../app/constants';
 import { Letter } from '../../../app/Model/letter';
@@ -33,6 +33,8 @@ export class LetterComponent implements OnInit, OnDestroy {
   /** Default value for Letter.character */
   @Input() public value: string | undefined;
 
+  @Output() public keyPress = new EventEmitter<string>();
+
   private letterStateIdentifier$: Observable<LetterState>;
 
   constructor(
@@ -63,5 +65,10 @@ export class LetterComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
 
+  }
+
+  /** On component click event */
+  public onClick(event: Event) {
+    this.keyPress.emit(this.letter.character);
   }
 }
