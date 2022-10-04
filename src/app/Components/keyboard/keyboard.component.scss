@@ -1,19 +1,20 @@
 .keyboard {
   display: grid;
-  grid-template-columns: repeat(20, minmax(0.5em, 1em));
-  grid-auto-rows: 3em;
-  gap: 1em;
+  grid-template-columns: repeat(20, minmax(20px, 20px));
+  grid-auto-rows: 40px;
+  gap: 5px;
   justify-content: center;
 
   .key {
-    padding: 5px;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    padding: 2px;
     grid-column: span 2;
-    background-color: pink;
   }
 
   .large {
-    width: 90PX;
-    background-color: aqua;
+    width: 50px;
     grid-column: span 3;
   }
 }

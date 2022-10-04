@@ -10,14 +10,6 @@ import { Letter } from '../../../app/Model/letter';
 })
 export class WordComponent implements OnInit {
 
-  /** Created word - value holder */
-  private _wordCreated: string;
-
-  /** Created word */
-  public get wordCreated(): string {
-    return this._wordCreated;
-  }
-
   /** True when word is finalised */
   public active: boolean;
 
@@ -33,11 +25,21 @@ export class WordComponent implements OnInit {
     this.letters = [];
     this.letterIndex = 0;
     this.active = false;
-    this._wordCreated = '';
     this.resetWord();
   }
 
   ngOnInit(): void {
+  }
+
+  /** Created word */
+  public get wordCreated(): string {
+    let word = '';
+    this.letters.forEach((letter: Letter) => {
+      if (letter.character) {
+        word += letter.character
+      }
+    });
+    return word;
   }
 
   /**
@@ -62,10 +64,9 @@ export class WordComponent implements OnInit {
   public addLetter(character: string): void {
     if (character && character.length > 0 && this.letterIndex < this.letters.length) {
       const char = character.toUpperCase().substring(0, 1);
-      if(this.wordValidatorService.validateLetter(char)) {
+      if (this.wordValidatorService.validateLetter(char)) {
         this.letters[this.letterIndex].character = char;
         this.letterIndex++;
-        this._wordCreated += character;
       }
     }
   }
@@ -81,7 +82,6 @@ export class WordComponent implements OnInit {
 
     this.wordValidatorService.validateWord(word).subscribe((response: boolean) => {
       if (response) {
-        this._wordCreated = word;
         this.active = true;
         this.validInput.emit(word);
       } else {
@@ -94,6 +94,8 @@ export class WordComponent implements OnInit {
    * Backspace operation
    */
   public deleteLastCharacter(): void {
-    this.letters[--this.letterIndex].character = undefined;
+    if (this.letterIndex > 0) {
+      this.letters[--this.letterIndex].character = undefined;
+    }
   }
 }

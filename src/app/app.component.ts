@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChildren, QueryList, AfterViewInit } 
 import { Observable } from 'rxjs';
 import { WordComponent } from './Components/word/word.component';
 import { Constants, GameState } from './constants';
+import { Letter } from './Model/letter';
 import { PuzzleCreatorService } from './Services/puzzle-creator.service';
 
 @Component({
@@ -25,6 +26,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   private getPuzzleWord$: Observable<string>;
 
   public words: Array<WordComponent> = new Array();
+  public referenceLetters: Array<Letter>;
 
   @ViewChildren('word') wordElementList!: QueryList<WordComponent>;
 
@@ -33,6 +35,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {
     this.gameState = GameState.Playing;
     this.gameWord = '';
+    this.referenceLetters = [];
     this.getPuzzleWord$ = new Observable();
   }
 
@@ -74,6 +77,14 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param word created word
    */
   public validInputWord(word: string) {
+    setTimeout(() => {
+      let letters = new Array<Letter>;
+      this.words.forEach(word => {
+        letters.push(...word.letters);
+      });
+      this.referenceLetters = letters;
+    }, 100);
+
     if (word === this.gameWord.toUpperCase()) {
       this.gameState = GameState.Win;
       this.errorMsg = 'You got it';
@@ -95,6 +106,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       this.errorMsg = undefined;
       if (key == 'Enter') {
         this.wordFinalised();
+      } else if (key == '<') {
+        this.words[this.wordIndex].deleteLastCharacter();
       } else {
         this.addLetterToWord(key);
       }
@@ -117,10 +130,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /** Word is finalised */
   public wordFinalised(): void {
-    if (this.words[this.wordIndex].wordCreated.length < Constants.WORD_SIZE) {
+    const wordComponent: WordComponent = this.words[this.wordIndex]
+    if (wordComponent.wordCreated.length < Constants.WORD_SIZE) {
       this.errorMsg = 'Please enter 5 letter valid word';
     } else {
-      this.words[this.wordIndex].wordFinalised();
+      wordComponent.wordFinalised();
     }
   }
 }
