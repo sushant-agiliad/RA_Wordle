@@ -29,7 +29,13 @@ export class KeyboardComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     document.addEventListener("keyup", (key) => {
-      this.keyPress.emit(key.key);
+      if (key.key.length == 1) {
+        this.keyPress.emit(key.key);
+      } else if (key.key == 'Enter') {
+        this.keyPress.emit(key.key);
+      } else if (key.key == 'Backspace') {
+        this.keyPress.emit('<');
+      }
     })
   }
 

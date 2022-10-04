@@ -1,16 +1,12 @@
-<h1>{{title}}</h1>
-<hr>
-<br>
-<link rel="stylesheet" href="app.component.scss">
-<h2>Master game component. Work in progress</h2>
-<div>Game word: {{[[gameWord]]}}</div>
-<div>Game state: {{[[gameState]]}}</div>
-<div>Timestamp: {{dateTime | date:'yyyy-MM-dd HH:mm:ss'}}</div>
 <div data-guess-grid class="main-container">
+    <h1>{{title}}</h1>
+    <div class="error-msg" [ngClass]="gameState===1?'good':'bad'">{{[[errorMsg]]}}</div>
+    <hr>
+    <br>
     <div class="words-container" *ngFor="let index of [].constructor(totalWords)">
         <app-word #word class="word" (errorInput)="errorInputWord($event)" (validInput)="validInputWord($event)">
         </app-word>
     </div>
-    <div class="error-msg">{{[[errorMsg]]}}</div>
-    <app-keyboard [referenceLetters]="referenceLetters" (keyPress)="keyPress($event)"></app-keyboard>
+    <hr>
+    <app-keyboard class="keyboard" [referenceLetters]="referenceLetters" (keyPress)="keyPress($event)"></app-keyboard>
 </div>

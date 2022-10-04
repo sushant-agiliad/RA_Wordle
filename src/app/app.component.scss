@@ -14,9 +14,20 @@
         .word {}
     }
 
-    .error-msg {}
+    .error-msg {
+        height: 20px;
+    }
+    .good {
+        color: rgb(153, 206, 73);
+    }
+
+    .bad {
+        color: rgb(207, 27, 141);
+    }
+
+    .keyboard {}
 }
 
 hr {
-    width: 500px;
+    width: 700px;
 }
