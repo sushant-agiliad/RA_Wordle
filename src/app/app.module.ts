@@ -7,13 +7,15 @@ import { WordComponent } from './Components/word/word.component';
 import { KeyboardComponent } from './Components/keyboard/keyboard.component';
 import { GraphQLModule } from './graphql.module';
 import { HttpClientModule } from '@angular/common/http';
+import { ProvidedWordsComponent } from './provided-words/provided-words.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LetterComponent,
     WordComponent,
-    KeyboardComponent
+    KeyboardComponent,
+    ProvidedWordsComponent
   ],
   imports: [
     BrowserModule,
