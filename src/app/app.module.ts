@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { LetterComponent } from './Components/letter/letter.component';
 import { WordComponent } from './Components/word/word.component';
@@ -19,6 +19,7 @@ import { ProvidedWordsComponent } from './provided-words/provided-words.componen
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     GraphQLModule,
     HttpClientModule
   ],
