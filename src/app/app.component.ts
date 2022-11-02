@@ -87,12 +87,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (word === this.gameWord.toUpperCase()) {
       this.gameState = GameState.Win;
-      this.errorMsg = 'You got it';
+      this.errorMsg = 'You Won!!!';
     } else {
       this.wordIndex++;
       if (this.wordIndex >= this.words.length) {
         this.gameState = GameState.Out;
-        this.errorMsg = 'Out of tries, try again';
+        this.errorMsg = 'Out of tries! The Answer is ' + this.gameWord + ". Please refresh and try again!";
       }
     }
   }

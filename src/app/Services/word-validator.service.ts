@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Apollo } from 'apollo-angular';
+import { GET_ISVALIDWORD } from '../graphql/graphql.queries';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WordValidatorService {
 
-  constructor() { }
+  constructor(private apollo: Apollo) { }
 
   /**
    * Check if the word is valid
@@ -15,7 +17,15 @@ export class WordValidatorService {
    */
   public validateWord(word: string): Observable<boolean> {
     let response = new Observable<boolean>((observer) => {
-      observer.next(true);
+      this.apollo.watchQuery<Boolean>({
+        query: GET_ISVALIDWORD,
+        variables: {
+          word: word,
+        },
+      }).valueChanges.subscribe((result: any) => {
+        observer.next(result.data.validWord);
+      });
+      //observer.next(true);
     });
     return response;
   }

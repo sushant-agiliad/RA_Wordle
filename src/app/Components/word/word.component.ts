@@ -85,7 +85,7 @@ export class WordComponent implements OnInit {
         this.active = true;
         this.validInput.emit(word);
       } else {
-        this.errorInput.emit('Invalid input word, try again');
+        this.errorInput.emit('Invalid input word, please try a valid word!');
       }
     })
   }

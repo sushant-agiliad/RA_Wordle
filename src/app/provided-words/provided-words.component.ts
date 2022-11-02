@@ -14,6 +14,7 @@ export class ProvidedWordsComponent implements OnInit {
   constructor(private apollo: Apollo) { }
 
   ngOnInit(): void {
+    
     this.apollo.watchQuery({
       query: GET_PROVIDEDWORDS
     }).valueChanges.subscribe(({ data, error }: any) => {
@@ -21,5 +22,6 @@ export class ProvidedWordsComponent implements OnInit {
       this.error = error;
   }
   );
+
   }
 }
