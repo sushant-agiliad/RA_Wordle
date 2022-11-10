@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { KEYVAL_DELETE, KEYVAL_ENTER } from './Components/keyboard/keyboard.component';
 import { WordComponent } from './Components/word/word.component';
 import { Constants, GameState } from './constants';
 import { Letter } from './Model/letter';
@@ -104,9 +105,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   public keyPress(key: string) {
     if (this.gameState == GameState.Playing) {
       this.errorMsg = undefined;
-      if (key == 'Enter') {
+      if (key == KEYVAL_ENTER) {
         this.wordFinalised();
-      } else if (key == '<') {
+      } else if (key == KEYVAL_DELETE) {
         this.words[this.wordIndex].deleteLastCharacter();
       } else {
         this.addLetterToWord(key);
