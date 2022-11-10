@@ -3,6 +3,9 @@ import { LetterState } from 'src/app/constants';
 import { Letter } from 'src/app/Model/letter';
 import { LetterComponent } from '../letter/letter.component';
 
+export const KEYVAL_ENTER: string = 'Enter';
+export const KEYVAL_DELETE: string = 'Del';
+
 @Component({
   selector: 'app-keyboard',
   templateUrl: './keyboard.component.html',
@@ -31,10 +34,10 @@ export class KeyboardComponent implements OnInit, AfterViewInit {
     document.addEventListener("keyup", (key) => {
       if (key.key.length == 1) {
         this.keyPress.emit(key.key);
-      } else if (key.key == 'Enter') {
+      } else if (key.key == KEYVAL_ENTER) {
         this.keyPress.emit(key.key);
       } else if (key.key == 'Backspace') {
-        this.keyPress.emit('<');
+        this.keyPress.emit(KEYVAL_DELETE);
       }
     })
   }
