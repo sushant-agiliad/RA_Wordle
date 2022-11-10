@@ -1,10 +1,15 @@
 import { Component, OnDestroy, OnInit, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { KEYVAL_DELETE, KEYVAL_ENTER } from './Components/keyboard/keyboard.component';
-import { WordComponent } from './Components/word/word.component';
+import { WordComponent, WordKeyFeatures } from './Components/word/word.component';
 import { Constants, GameState } from './constants';
 import { Letter } from './Model/letter';
 import { PuzzleCreatorService } from './Services/puzzle-creator.service';
+
+const AUDIO_ONEUP = "OneUp.mp3";
+const AUDIO_BUZZ = "buzz.wav";
+const AUDIO_OUT = "Over.wav";
+const AUDIO_WIN = "Win.mp3";
 
 @Component({
   selector: 'app-root',
@@ -28,6 +33,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public words: Array<WordComponent> = new Array();
   public referenceLetters: Array<Letter>;
+
+  private audio = new Audio();
 
   @ViewChildren('word') wordElementList!: QueryList<WordComponent>;
 
@@ -70,6 +77,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param error 
    */
   public errorInputWord(error: string) {
+    this.playAudio(AUDIO_BUZZ);
     this.errorMsg = error;
   }
 
@@ -77,7 +85,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
    * Event catcher from WordComponent on valid input
    * @param word created word
    */
-  public validInputWord(word: string) {
+  public validInputWord(response: { str: string, wordKeyFeature: WordKeyFeatures }) {
     setTimeout(() => {
       let letters = new Array<Letter>;
       this.words.forEach(word => {
@@ -86,14 +94,20 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       this.referenceLetters = letters;
     }, 100);
 
-    if (word === this.gameWord.toUpperCase()) {
+    if (response.str === this.gameWord.toUpperCase()) {
       this.gameState = GameState.Win;
       this.errorMsg = 'You Won!!!';
+      this.playAudio(AUDIO_WIN);
     } else {
       this.wordIndex++;
       if (this.wordIndex >= this.words.length) {
         this.gameState = GameState.Out;
         this.errorMsg = 'Out of tries! The Answer is ' + this.gameWord + ". Please refresh and try again!";
+        this.playAudio(AUDIO_OUT);
+      } else {
+        if (response.wordKeyFeature == WordKeyFeatures.HasGreen) {
+          this.playAudio(AUDIO_ONEUP);
+        }
       }
     }
   }
@@ -134,8 +148,16 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     const wordComponent: WordComponent = this.words[this.wordIndex]
     if (wordComponent.wordCreated.length < Constants.WORD_SIZE) {
       this.errorMsg = 'Please enter 5 letter valid word';
+      this.playAudio(AUDIO_BUZZ);
     } else {
       wordComponent.wordFinalised();
     }
+  }
+
+  /** Play provided audio file */
+  private playAudio(file: string) {
+    this.audio.src = "../assets/" + file;
+    this.audio.load();
+    this.audio.play();
   }
 }

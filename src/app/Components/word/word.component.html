@@ -1,5 +1,5 @@
 <div class="main-component">
     <div class="letter-array" *ngFor="let letter of letters">
-        <app-letter class="letter" [letter]="letter" [active]="active"></app-letter>
+        <app-letter class="letter" [letter]="letter" [active]="active" (activated)="letterActive($event)"></app-letter>
     </div>
 </div>

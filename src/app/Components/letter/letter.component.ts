@@ -73,6 +73,7 @@ export class LetterComponent implements OnInit, OnDestroy {
   @Input() public value: string | undefined;
 
   @Output() public keyPress = new EventEmitter<string>();
+  @Output() public activated = new EventEmitter<LetterState>();
 
   private letterStateIdentifier$: Observable<LetterState>;
 
@@ -100,6 +101,7 @@ export class LetterComponent implements OnInit, OnDestroy {
     this.letterStateIdentifier$ = this.letterStateIdentifier.getLetterState(this.letter);
     this.letterStateIdentifier$.subscribe((response: LetterState) => {
       this.letter.state = response;
+      this.activated.emit(response);
     })
   }
 

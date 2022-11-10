@@ -16,8 +16,10 @@ export class WordComponent implements OnInit {
   public letters: Array<Letter>;
   private letterIndex: number;
 
+  private wordKeyFeature: WordKeyFeatures;
+
   @Output() public errorInput = new EventEmitter<string>();
-  @Output() public validInput = new EventEmitter<string>();
+  @Output() public validInput = new EventEmitter<{ str: string, wordKeyFeature: WordKeyFeatures }>();
 
   constructor(
     private wordValidatorService: WordValidatorService
@@ -25,6 +27,7 @@ export class WordComponent implements OnInit {
     this.letters = [];
     this.letterIndex = 0;
     this.active = false;
+    this.wordKeyFeature = WordKeyFeatures.None;
     this.resetWord();
   }
 
@@ -83,7 +86,9 @@ export class WordComponent implements OnInit {
     this.wordValidatorService.validateWord(word).subscribe((response: boolean) => {
       if (response) {
         this.active = true;
-        this.validInput.emit(word);
+        setTimeout(() => {
+          this.validInput.emit({str: word, wordKeyFeature: this.wordKeyFeature});
+        }, 500);
       } else {
         this.errorInput.emit('Invalid input word, please try a valid word!');
       }
@@ -98,4 +103,24 @@ export class WordComponent implements OnInit {
       this.letters[--this.letterIndex].character = undefined;
     }
   }
+
+  /**
+   * Callback for Activation success in Letter
+   * @param state 
+   */
+  public letterActive(state: LetterState) {
+    if (this.wordKeyFeature != WordKeyFeatures.HasGreen) {
+      if (state == LetterState.Green) {
+        this.wordKeyFeature = WordKeyFeatures.HasGreen;
+      } else if (state == LetterState.Yellow) {
+        this.wordKeyFeature = WordKeyFeatures.HasYellow;
+      }
+    }
+  }
+}
+
+export enum WordKeyFeatures {
+  None = 0,
+  HasGreen = 1,
+  HasYellow = 2,
 }
